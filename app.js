@@ -24,18 +24,17 @@ const connectToDatabase = async () => {
 }
 
 // Filter used to find the document to update 
-const documentToUpdate = { _id: ObjectId("Your _id document")}
+const documentsToUpdate = { account_type: "checking"}
 
 // Operations(s) to perform on the document.
-const update = { $inc: { balance: 100 }}
+const update = { $push: { transfers_complete: "TR413308000" }}
 
 const main = async () => {
   try {
     await connectToDatabase()
-    // 'find one' account that matches _id
-    let result = await accountsCollection.updateOne(documentToUpdate, update)
-    result.modifiedCount === 1
-      ? console.log("Updated one document")
+    let result = await accountsCollection.updateMany(documentsToUpdate, update)
+    result.modifiedCount > 0
+      ? console.log(`Updated ${result.modifiedCount} documents`)
       : console.log("No documents updated")
   } catch (error) {
     console.error(`Error finding documents: ${error}`)
