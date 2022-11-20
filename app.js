@@ -23,21 +23,18 @@ const connectToDatabase = async () => {
   }
 }
 
-// Filter used to find the document to update 
-const documentsToUpdate = { account_type: "checking"}
-
-// Operations(s) to perform on the document.
-const update = { $push: { transfers_complete: "TR413308000" }}
+// Filter used to find the document to delete 
+const documentToDelete = { _id: ObjectId("Your _id document")}
 
 const main = async () => {
   try {
     await connectToDatabase()
-    let result = await accountsCollection.updateMany(documentsToUpdate, update)
-    result.modifiedCount > 0
-      ? console.log(`Updated ${result.modifiedCount} documents`)
+    let result = await accountsCollection.deleteOne(documentToDelete)
+    result.deletedCount === 1
+      ? console.log(`Deleted one document`)
       : console.log("No documents updated")
   } catch (error) {
-    console.error(`Error finding documents: ${error}`)
+    console.error(`Error deleting documents: ${error}`)
   } finally {
     // close the client connection
     await client.close()
