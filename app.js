@@ -24,15 +24,15 @@ const connectToDatabase = async () => {
 }
 
 // Filter used to find the document to delete 
-const documentToDelete = { _id: ObjectId("Your _id document")}
+const documentsToDelete = { balance: { $lt: 500}}
 
 const main = async () => {
   try {
     await connectToDatabase()
-    let result = await accountsCollection.deleteOne(documentToDelete)
-    result.deletedCount === 1
-      ? console.log(`Deleted one document`)
-      : console.log("No documents updated")
+    let result = await accountsCollection.deleteMany(documentsToDelete)
+    result.deletedCount > 0
+      ? console.log(`Deleted ${result.deletedCount} documents`)
+      : console.log("No documents deleted")
   } catch (error) {
     console.error(`Error deleting documents: ${error}`)
   } finally {
