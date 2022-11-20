@@ -23,31 +23,18 @@ const connectToDatabase = async () => {
   }
 }
 
-// Simple mock
-const sampleAccounts = [
-  {
-    account_id: "MDB011235813",
-    account_holder: "Osvaldo Lopes",
-    account_type: "checking",
-    balance: 60218,
-  },
-  {
-    account_id: "MDB829000001",
-    account_holder: "John Jhonny",
-    account_type: "savings",
-    balance: 267914296,
-  }
-]
+const documentsToFind = { balance: { $gt: 4700 }}
 
 const main = async () => {
   try {
     await connectToDatabase()
-    // 'Insert many' documents by using the sampleAccounts mock
-    let result = await accountsCollection.insertMany(sampleAccounts)
-    console.log(`Inserted ${result.insertedCount} documents`)
-    console.log(result)
+    // 'find' the accounts with balance greater than 4700
+    let result = accountsCollection.find(documentsToFind)
+    let docCount = accountsCollection.countDocuments(documentsToFind)
+    await result.forEach((doc) => console.log(doc))
+    console.log(`Found ${await docCount} documents`)
   } catch (error) {
-    console.error(`Error inserting documents: ${error}`)
+    console.error(`Error finding documents: ${error}`)
   } finally {
     // close the client connection
     await client.close()
