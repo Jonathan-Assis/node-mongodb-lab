@@ -24,22 +24,30 @@ const connectToDatabase = async () => {
 }
 
 // Simple mock
-const sampleAccount = {
-  account_holder: "Robervaldo Lopes",
-  account_id: "MDB829001337",
-  account_type: "checking",
-  balance: 50352434,
-  last_updated: new Date(),
-}
+const sampleAccounts = [
+  {
+    account_id: "MDB011235813",
+    account_holder: "Osvaldo Lopes",
+    account_type: "checking",
+    balance: 60218,
+  },
+  {
+    account_id: "MDB829000001",
+    account_holder: "John Jhonny",
+    account_type: "savings",
+    balance: 267914296,
+  }
+]
 
 const main = async () => {
   try {
     await connectToDatabase()
-    // 'Insert one' document by using the sampleAccount mock
-    let result = await accountsCollection.insertOne(sampleAccount)
-    console.log(`Inserted document: ${result.insertedId}`)
+    // 'Insert many' documents by using the sampleAccounts mock
+    let result = await accountsCollection.insertMany(sampleAccounts)
+    console.log(`Inserted ${result.insertedCount} documents`)
+    console.log(result)
   } catch (error) {
-    console.error(`Error inserting document: ${error}`)
+    console.error(`Error inserting documents: ${error}`)
   } finally {
     // close the client connection
     await client.close()
