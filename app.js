@@ -1,5 +1,5 @@
 // Require MongoDB language driver
-const { MongoClient } = require("mongodb")
+const { MongoClient, ObjectId } = require("mongodb")
 require("dotenv").config();
 
 // Use .env to specify the Atlas MongoDB uri connection
@@ -7,7 +7,7 @@ const uri = process.env.ATLAS_MONGODB_URI
 const client = new MongoClient(uri)
 
 // Bank account example
-const dbname= "bank"
+const dbname = "bank"
 const collection_name = "accounts"
 
 // Select the database and collection instance
@@ -23,16 +23,15 @@ const connectToDatabase = async () => {
   }
 }
 
-const documentsToFind = { balance: { $gt: 4700 }}
+const documentToFind = { _id: ObjectId("Your _id document")}
 
 const main = async () => {
   try {
     await connectToDatabase()
-    // 'find' the accounts with balance greater than 4700
-    let result = accountsCollection.find(documentsToFind)
-    let docCount = accountsCollection.countDocuments(documentsToFind)
-    await result.forEach((doc) => console.log(doc))
-    console.log(`Found ${await docCount} documents`)
+    // 'find one' account that matches _id
+    let result = await accountsCollection.findOne(documentToFind)
+    console.log(`Found one document`)
+    console.log(result)
   } catch (error) {
     console.error(`Error finding documents: ${error}`)
   } finally {
