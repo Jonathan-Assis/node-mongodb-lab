@@ -1,4 +1,4 @@
-# MongoDB multi-document transaction with Node.JS
+# MongoDB with Node.JS
 
 MongoDB CRUD Operations in Node.js
 
